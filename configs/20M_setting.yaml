@@ -1,0 +1,178 @@
+compile: null
+run_name: first_20M
+wandb:
+  #run_id: 20M-1try
+  entity: tcastellani-university-of-chicago
+  name: first_20M
+  project: onboarding-olmo
+  group: try
+data_mixture:
+  RedPajamaArXiv: 1
+  RedPajamaCommonCrawl: 0
+  RedPajamaWikipedia: 0
+  RedPajamaBook: 0
+  RedPajamaGithub: 0
+  RedPajamaC4: 0
+  RedPajamaStackExchange: 0
+global_train_batch_size: 512
+device_train_microbatch_size: 8
+device_eval_batch_size: 8
+eval_interval: 2
+eval_subset_num_batches: -1
+max_duration: 1ep
+max_grad_norm: 1.0
+max_grad_norm_ratio: null
+save_folder: /user/tc3527/onboarding_task/olmo20M/first-try
+save_interval_unsharded: 1000
+save_num_unsharded_checkpoints_to_keep: -1
+save_overwrite: true
+model:
+  activation_type: swiglu
+  alibi: false
+  attention_dropout: 0.0
+  attention_layer_norm: false
+  block_type: sequential
+  clip_qkv: null
+  d_model: 256
+  embedding_dropout: 0.0
+  embedding_size: 50257
+  eos_token_id: 50256
+  flash_attention: true
+  include_bias: false
+  init_cutoff_factor: 3
+  init_device: cuda
+  init_fn: mitchell
+  init_std: 0.02
+  layer_norm_type: default
+  layer_norm_with_affine: false
+  bias_for_layer_norm: false
+  attention_layer_norm_with_affine: false
+  max_sequence_length: 1024
+  mlp_ratio: 8
+  n_heads: 8
+  n_layers: 8
+  pad_token_id: 50256
+  residual_dropout: 0.0
+  rope: true
+  vocab_size: 50257
+  weight_tying: false
+optimizer:
+  betas:
+  - 0.9
+  - 0.95
+  decay_embeddings: true
+  decay_norm_and_bias: true
+  eps: 1.0e-08
+  learning_rate: 0.0006
+  metrics_log_interval: 10
+  name: adamw
+  weight_decay: 0.1
+scheduler:
+  alpha_f: 0.1
+  name: cosine_with_warmup
+  t_warmup: 2000
+  warmup_min_lr: 0
+tokenizer:
+  identifier: /user/tc3527/onboarding_task/GPT2TokenizerFast-gpt2/tokenizer.json
+  truncate_direction: right
+distributed_strategy: ddp
+ddp:
+  find_unused_params: false
+  grad_sync_mode: batch
+seed: 65077
+precision: amp_bf16
+speed_monitor:
+  window_size: 20
+dry_run: false
+gen1_gc_interval: 1
+load_path: /user/tc3527/onboarding_task/olmo20M/first-try/latest-unsharded/model.pt
+sharded_checkpointer: null
+eval_on_load: true
+evaluators:
+- label: slimpajama
+  data:
+    drop_last: true
+    num_workers: 0
+    pad_direction: right
+    persistent_workers: true
+    pin_memory: true
+    prefetch_factor: 8
+    datasets:
+      RedPajamaCommonCrawl:
+      - /shared/share_mala/tyen//data-mixing/slimpajama/collected_arr/validation/RedPajamaCommonCrawl/chunk=000292_input_ids.npy
+      - /shared/share_mala/tyen//data-mixing/slimpajama/collected_arr/validation/RedPajamaCommonCrawl/chunk=000050_input_ids.npy
+      - /shared/share_mala/tyen//data-mixing/slimpajama/collected_arr/validation/RedPajamaCommonCrawl/chunk=000379_input_ids.npy
+      - /shared/share_mala/tyen//data-mixing/slimpajama/collected_arr/validation/RedPajamaCommonCrawl/chunk=000339_input_ids.npy
+      RedPajamaC4:
+      - /shared/share_mala/tyen//data-mixing/slimpajama/collected_arr/validation/RedPajamaC4/chunk=000227_input_ids.npy
+      - /shared/share_mala/tyen//data-mixing/slimpajama/collected_arr/validation/RedPajamaC4/chunk=000138_input_ids.npy
+      - /shared/share_mala/tyen//data-mixing/slimpajama/collected_arr/validation/RedPajamaC4/chunk=000164_input_ids.npy
+      - /shared/share_mala/tyen//data-mixing/slimpajama/collected_arr/validation/RedPajamaC4/chunk=000027_input_ids.npy
+      RedPajamaWikipedia:
+      - /shared/share_mala/tyen//data-mixing/slimpajama/collected_arr/validation/RedPajamaWikipedia/chunk=000018_input_ids.npy
+      - /shared/share_mala/tyen//data-mixing/slimpajama/collected_arr/validation/RedPajamaWikipedia/chunk=000028_input_ids.npy
+      RedPajamaStackExchange:
+      - /shared/share_mala/tyen//data-mixing/slimpajama/collected_arr/validation/RedPajamaStackExchange/chunk=000028_input_ids.npy
+      - /shared/share_mala/tyen//data-mixing/slimpajama/collected_arr/validation/RedPajamaStackExchange/chunk=000029_input_ids.npy
+      RedPajamaGithub:
+      - /shared/share_mala/tyen//data-mixing/slimpajama/collected_arr/validation/RedPajamaGithub/chunk=000000_input_ids.npy
+      - /shared/share_mala/tyen//data-mixing/slimpajama/collected_arr/validation/RedPajamaGithub/chunk=000025_input_ids.npy
+      RedPajamaArXiv:
+      - /shared/share_mala/tyen//data-mixing/slimpajama/collected_arr/validation/RedPajamaArXiv/chunk=000003_input_ids.npy
+      - /shared/share_mala/tyen//data-mixing/slimpajama/collected_arr/validation/RedPajamaArXiv/chunk=000010_input_ids.npy
+      RedPajamaBook:
+      - /shared/share_mala/tyen//data-mixing/slimpajama/collected_arr/validation/RedPajamaBook/chunk=000015_input_ids.npy
+      - /shared/share_mala/tyen//data-mixing/slimpajama/collected_arr/validation/RedPajamaBook/chunk=000011_input_ids.npy
+- label: piqa
+  type: downstream
+- label: hellaswag
+  type: downstream
+data:
+  drop_last: true
+  num_workers: 0
+  pad_direction: right
+  paths:
+  - /shared/share_mala/tyen//data-mixing/slimpajama/collected_arr/train/RedPajamaWikipedia/chunk=011588_input_ids.npy
+  - /shared/share_mala/tyen//data-mixing/slimpajama/collected_arr/train/RedPajamaWikipedia/chunk=032504_input_ids.npy
+  - /shared/share_mala/tyen//data-mixing/slimpajama/collected_arr/train/RedPajamaWikipedia/chunk=005803_input_ids.npy
+  - /shared/share_mala/tyen//data-mixing/slimpajama/collected_arr/train/RedPajamaWikipedia/chunk=019935_input_ids.npy
+  - /shared/share_mala/tyen//data-mixing/slimpajama/collected_arr/train/RedPajamaWikipedia/chunk=021668_input_ids.npy
+  - /shared/share_mala/tyen//data-mixing/slimpajama/collected_arr/train/RedPajamaWikipedia/chunk=035552_input_ids.npy
+  - /shared/share_mala/tyen//data-mixing/slimpajama/collected_arr/train/RedPajamaWikipedia/chunk=031563_input_ids.npy
+  - /shared/share_mala/tyen//data-mixing/slimpajama/collected_arr/train/RedPajamaWikipedia/chunk=048754_input_ids.npy
+  - /shared/share_mala/tyen//data-mixing/slimpajama/collected_arr/train/RedPajamaWikipedia/chunk=012812_input_ids.npy
+  - /shared/share_mala/tyen//data-mixing/slimpajama/collected_arr/train/RedPajamaWikipedia/chunk=018533_input_ids.npy
+  - /shared/share_mala/tyen//data-mixing/slimpajama/collected_arr/train/RedPajamaWikipedia/chunk=017494_input_ids.npy
+  - /shared/share_mala/tyen//data-mixing/slimpajama/collected_arr/train/RedPajamaWikipedia/chunk=035578_input_ids.npy
+  - /shared/share_mala/tyen//data-mixing/slimpajama/collected_arr/train/RedPajamaWikipedia/chunk=006665_input_ids.npy
+  - /shared/share_mala/tyen//data-mixing/slimpajama/collected_arr/train/RedPajamaWikipedia/chunk=048313_input_ids.npy
+  - /shared/share_mala/tyen//data-mixing/slimpajama/collected_arr/train/RedPajamaWikipedia/chunk=042551_input_ids.npy
+  - /shared/share_mala/tyen//data-mixing/slimpajama/collected_arr/train/RedPajamaWikipedia/chunk=023709_input_ids.npy
+  - /shared/share_mala/tyen//data-mixing/slimpajama/collected_arr/train/RedPajamaWikipedia/chunk=032608_input_ids.npy
+  - /shared/share_mala/tyen//data-mixing/slimpajama/collected_arr/train/RedPajamaWikipedia/chunk=027717_input_ids.npy
+  - /shared/share_mala/tyen//data-mixing/slimpajama/collected_arr/train/RedPajamaWikipedia/chunk=028622_input_ids.npy
+  - /shared/share_mala/tyen//data-mixing/slimpajama/collected_arr/train/RedPajamaWikipedia/chunk=035822_input_ids.npy
+  - /shared/share_mala/tyen//data-mixing/slimpajama/collected_arr/train/RedPajamaWikipedia/chunk=006204_input_ids.npy
+  - /shared/share_mala/tyen//data-mixing/slimpajama/collected_arr/train/RedPajamaWikipedia/chunk=042201_input_ids.npy
+  - /shared/share_mala/tyen//data-mixing/slimpajama/collected_arr/train/RedPajamaWikipedia/chunk=039608_input_ids.npy
+  - /shared/share_mala/tyen//data-mixing/slimpajama/collected_arr/train/RedPajamaWikipedia/chunk=012196_input_ids.npy
+  - /shared/share_mala/tyen//data-mixing/slimpajama/collected_arr/train/RedPajamaWikipedia/chunk=023850_input_ids.npy
+  - /shared/share_mala/tyen//data-mixing/slimpajama/collected_arr/train/RedPajamaWikipedia/chunk=042024_input_ids.npy
+  - /shared/share_mala/tyen//data-mixing/slimpajama/collected_arr/train/RedPajamaWikipedia/chunk=021413_input_ids.npy
+  - /shared/share_mala/tyen//data-mixing/slimpajama/collected_arr/train/RedPajamaWikipedia/chunk=024229_input_ids.npy
+  - /shared/share_mala/tyen//data-mixing/slimpajama/collected_arr/train/RedPajamaWikipedia/chunk=033523_input_ids.npy
+  - /shared/share_mala/tyen//data-mixing/slimpajama/collected_arr/train/RedPajamaWikipedia/chunk=018462_input_ids.npy
+  - /shared/share_mala/tyen//data-mixing/slimpajama/collected_arr/train/RedPajamaWikipedia/chunk=048728_input_ids.npy
+  - /shared/share_mala/tyen//data-mixing/slimpajama/collected_arr/train/RedPajamaWikipedia/chunk=001702_input_ids.npy
+  - /shared/share_mala/tyen//data-mixing/slimpajama/collected_arr/train/RedPajamaWikipedia/chunk=040751_input_ids.npy
+  - /shared/share_mala/tyen//data-mixing/slimpajama/collected_arr/train/RedPajamaWikipedia/chunk=004146_input_ids.npy
+  - /shared/share_mala/tyen//data-mixing/slimpajama/collected_arr/train/RedPajamaWikipedia/chunk=030900_input_ids.npy
+  - /shared/share_mala/tyen//data-mixing/slimpajama/collected_arr/train/RedPajamaWikipedia/chunk=017482_input_ids.npy
+  - /shared/share_mala/tyen//data-mixing/slimpajama/collected_arr/train/RedPajamaWikipedia/chunk=001826_input_ids.npy
+  - /shared/share_mala/tyen//data-mixing/slimpajama/collected_arr/train/RedPajamaWikipedia/chunk=024299_input_ids.npy
+  - /shared/share_mala/tyen//data-mixing/slimpajama/collected_arr/train/RedPajamaWikipedia/chunk=001648_input_ids.npy
+  - /shared/share_mala/tyen//data-mixing/slimpajama/collected_arr/train/RedPajamaWikipedia/chunk=036497_input_ids.npy
+  persistent_workers: true
+  pin_memory: true
+  prefetch_factor: 8
+  timeout: 0

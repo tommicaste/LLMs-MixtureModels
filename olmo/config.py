@@ -58,11 +58,11 @@ __all__ = [
     "FSDPConfig",
     "SingleGPUConfig",
     "CheckpointType",
+    "DataMixtureConfig",
 ]
 
 C = TypeVar("C", bound="BaseConfig")
 D = TypeVar("D", bound="DictConfig|ListConfig")
-
 
 class BaseConfig:
     @classmethod
@@ -230,6 +230,28 @@ class InitFnType(StrEnum):
     This is what metaseq calls "full megatron init". It is the init used for Llama 2.
     """
 
+@dataclass
+class DataMixtureConfig:
+    """
+    Config for specifying the mixture of datasets.
+    The keys are dataset names, and the values are their proportions.
+    Proportions must sum to 1.0 (handled in code, not here).
+    This dataclass is ONLY for Wandb logging.
+    """
+    RedPajamaArXiv: Optional[float] = None
+    RedPajamaCommonCrawl: Optional[float] = None
+    RedPajamaWikipedia: Optional[float] = None
+    RedPajamaBook: Optional[float] = None
+    RedPajamaGithub: Optional[float] = None
+    RedPajamaC4: Optional[float] = None
+    RedPajamaStackExchange: Optional[float] = None
+
+    def asdict(self) -> Dict[str, Any]:
+        """
+        Returns a dictionary representation of the DataMixtureConfig,
+        excluding None values. This is useful for Wandb logging.
+        """
+        return {k: v for k, v in self.__dict__.items() if v is not None}
 
 @dataclass
 class ModelConfig(BaseConfig):
@@ -948,6 +970,11 @@ class ActivationCheckpointingStrategy(StrEnum):
 class TrainConfig(BaseConfig):
     """
     OLMo training configuration.
+    """
+    data_mixture: Optional[DataMixtureConfig] = field(default_factory=DataMixtureConfig)
+    """
+    Configuration for the mixture of datasets used for training.
+    This field is ONLY for Wandb logging.
     """
 
     run_name: Optional[str] = None

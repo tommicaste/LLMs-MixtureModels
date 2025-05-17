@@ -123,6 +123,9 @@ def main(cfg: TrainConfig) -> None:
             config=cfg.asdict(exclude=["wandb"]),
         )
 
+        if cfg.data_mixture:  # Check if data_mixture is present
+            wandb.log({"data_mixture": cfg.data_mixture.asdict()})
+
     barrier()
 
     # Set seed.
